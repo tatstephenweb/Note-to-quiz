@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quizzer — Turn Notes into Quizzes</title>
+  <link rel="stylesheet" href="style.css">  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="relative-z">
+
+  <!-- NAVBAR -->
+  <nav class="relative-z bg-paper border-b" style="border-color: var(--border);">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Logo mark -->
+        <span class="font-display font-700 text-lg tracking-tight" style="font-family: 'Syne', sans-serif;">Quizzer</span>
+      </div>
+      
+    </div>
+  </nav>
+
+  <!-- LOADER -->
+    <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+        <p class="loader-text" id="loaderText">Sending to AI...</p>
+    </div>
+
+  <!-- MAIN -->
+  <main class="relative-z max-w-5xl mx-auto px-4 sm:px-6 py-8">
+
+    <!-- === SCREEN: UPLOAD === -->
+    <div id="screen-upload" class="fade-in">
+
+      <!-- Hero -->
+      <div class="text-center mb-10">
+        <h1 class="text-4xl sm:text-5xl font-display font-800 leading-tight mb-4" style="font-family:'Syne', sans-serif; letter-spacing: -0.03em;">
+          Turn PDFs and <br>Powerpoints to Quizes.
+        </h1>
+        <p class="text-base sm:text-lg" style="color: var(--muted); max-width: 480px; margin: 0 auto;">
+          Upload your file we'll generate targeted questions so you can study smarter, not longer.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-6">
+
+        <!-- LEFT: Upload + settings -->
+        <form class="lg:col-span-3 space-y-5" enctype="multipart/form-data" action="generate.php" method="post">
+
+          <!-- Drop zone -->
+          <div class="drop-zone rounded-2xl p-8 text-center relative-z" id="dropZone" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" name="lecture" required accept=".pdf,.ppt,.pptx" class="hidden" onchange="handleFileSelect(event)">
+
+            <div id="dropContent">
+              <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center" style="background: var(--border);">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: var(--muted);">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <p class="font-display font-700 text-base mb-1" style="font-family: 'Syne', sans-serif; font-weight: 700;">Drop your file here</p>
+              <p class="text-sm mb-4" style="color: var(--muted);">or click to browse</p>
+              <div class="flex items-center justify-center gap-2 flex-wrap">
+                <span class="pill" style="background: #f0f5ff; color: var(--accent2);">PDF</span>
+                <span class="pill" style="background: #f0f5ff; color: var(--accent2);">PPT</span>
+                <span class="pill" style="background: #f0f5ff; color: var(--accent2);">PPTX</span>
+              </div>
+              <p class="text-xs mt-3" style="color: var(--muted);">Max file size: 25 MB</p>
+            </div>
+
+            <!-- File selected state -->
+            <div id="fileSelected" class="hidden">
+              <div class="file-chip mx-auto max-w-xs justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span id="fileName" class="text-sm font-medium truncate" style="max-width: 200px;"></span>
+                <span onclick="clearFile(event)" class="ml-auto text-xs" style="color: var(--muted);">✕</span>
+              </div>
+              <p class="text-sm mt-3" style="color: #16a34a; font-weight: 500;">File ready — click generate below</p>
+            </div>
+          </div>
+
+          <input type="hidden" name="num_questons" value="40"> 
+
+          <input type="submit" value="Generate Quiz" id="generateBtn" class="btn-accent px-8 py-4 text-base w-full sm:w-auto">
+
+        </form>
+
+        <!-- RIGHT: How it works -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="question-card p-6">
+            <h3 class="font-display font-700 text-base mb-5" style="font-family: 'Syne', sans-serif; font-weight: 700;">How it works</h3>
+            <div class="space-y-4">
+              <div class="flex gap-3 items-start">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0 font-display font-700" style="background: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700;">1</div>
+                <div>
+                  <p class="text-sm font-medium">Upload your notes</p>
+                  <p class="text-xs mt-0.5" style="color: var(--muted);">PDF lecture slides or PowerPoint files</p>
+                </div>
+              </div>
+              <div class="flex gap-3 items-start">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0 font-display font-700" style="background: var(--accent); font-family: 'Syne', sans-serif; font-weight: 700;">2</div>
+                <div>
+                  <p class="text-sm font-medium">Get instant questions</p>
+                  <p class="text-xs mt-0.5" style="color: var(--muted);">AI extracts key concepts and generates questions</p>
+                </div>
+              </div>
+              <div class="flex gap-3 items-start">
+                <div class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs flex-shrink-0 font-display font-700" style="background: var(--accent2); font-family: 'Syne', sans-serif; font-weight: 700;">3</div>
+                <div>
+                  <p class="text-sm font-medium">Take the quiz & review</p>
+                  <p class="text-xs mt-0.5" style="color: var(--muted);">Answer, get feedback, and see your score</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Formats -->
+          <div class="question-card p-5">
+            <p class="text-xs font-700 uppercase tracking-widest mb-3" style="color: var(--muted); font-family: 'Syne', sans-serif;">Supported formats</p>
+            <div class="space-y-2">
+              <div class="flex items-center gap-3">
+                <span class="pill" style="background: #fee2e2; color: #b91c1c; width: 52px; justify-content: center;">PDF</span>
+                <span class="text-xs" style="color: var(--muted);">Lecture notes, textbook excerpts</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="pill" style="background: #fef3c7; color: #b45309; width: 52px; justify-content: center;">PPT</span>
+                <span class="text-xs" style="color: var(--muted);">Slides from any version of PowerPoint</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="pill" style="background: #fef3c7; color: #b45309; width: 52px; justify-content: center;">PPTX</span>
+                <span class="text-xs" style="color: var(--muted);">Modern PowerPoint format</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+    <!-- === SCREEN: GENERATING === -->
+    <div id="screen-generating" class="hidden fade-in">
+      <div class="max-w-md mx-auto text-center py-20">
+        <div class="spinner mx-auto mb-6"></div>
+        <h2 class="font-display font-700 text-2xl mb-2" style="font-family: 'Syne', sans-serif; font-weight: 700;">Generating your quiz…</h2>
+        <p id="genStatus" class="text-sm mb-6" style="color: var(--muted);">Parsing document structure</p>
+        <div class="progress-bar max-w-xs mx-auto">
+          <div class="progress-fill" id="genProgress" style="width: 0%"></div>
+        </div>
+        <p class="text-xs mt-3" style="color: var(--muted);">This usually takes 10–30 seconds</p>
+      </div>
+    </div>
+
+    <!-- === SCREEN: PREVIEW (Questions list) === -->
+    <div id="screen-preview" class="hidden fade-in">
+
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="font-display font-700 text-2xl" style="font-family: 'Syne', sans-serif; font-weight: 700;">Quiz Ready</h2>
+          <p class="text-sm mt-0.5" style="color: var(--muted);" id="previewSubtitle"></p>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button class="btn-ghost px-4 py-2 text-sm" onclick="goBack()">Back</button>
+          <button class="btn-accent px-5 py-2 text-sm" onclick="startQuiz()">Start Quiz</button>
+        </div>
+      </div>
+
+      <!-- Question list preview -->
+      <div id="previewList" class="space-y-3"></div>
+
+      <!-- Bottom CTA -->
+      <div class="mt-8 text-center">
+        <button class="btn-accent px-10 py-4 text-base" onclick="startQuiz()">Start Quiz</button>
+      </div>
+
+    </div>
+
+    <!-- === SCREEN: QUIZ === -->
+    <div id="screen-quiz" class="hidden fade-in">
+
+      <!-- Quiz header -->
+      <div class="flex items-center justify-between mb-2">
+        <span id="quizCounter" class="font-display font-700 text-sm" style="font-family: 'Syne', sans-serif; font-weight: 700; color: var(--muted);"></span>
+        <button class="btn-ghost px-3 py-1.5 text-xs" onclick="exitQuiz()">Exit Quiz</button>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-bar mb-6">
+        <div class="progress-fill" id="quizProgress" style="width: 0%"></div>
+      </div>
+
+      <!-- Question card -->
+      <div class="question-card p-6 sm:p-8 mb-5">
+        <p class="text-xs font-700 uppercase tracking-widest mb-3" style="color: var(--muted); font-family: 'Syne', sans-serif;" id="questionType"></p>
+        <h2 class="font-display font-700 text-xl sm:text-2xl leading-snug" id="questionText" style="font-family: 'Syne', sans-serif; font-weight: 700;"></h2>
+      </div>
+
+      <!-- Options -->
+      <div id="optionsContainer" class="space-y-2.5 mb-6"></div>
+
+      <!-- Feedback -->
+      <div id="feedbackBox" class="hidden question-card p-4 mb-5">
+        <div class="flex gap-3 items-start">
+          <span id="feedbackIcon" class="text-lg flex-shrink-0"></span>
+          <div>
+            <p id="feedbackTitle" class="font-display font-700 text-sm mb-1" style="font-family: 'Syne', sans-serif; font-weight: 700;"></p>
+            <p id="feedbackText" class="text-sm" style="color: var(--muted);"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nav -->
+      <div class="flex justify-between items-center">
+        <span id="scoreTrack" class="text-sm" style="color: var(--muted);"></span>
+        <button id="nextBtn" class="btn-primary px-6 py-3 text-sm hidden" onclick="nextQuestion()">Next →</button>
+        <button id="finishBtn" class="btn-accent px-6 py-3 text-sm hidden" onclick="showResults()">See Results →</button>
+      </div>
+
+    </div>
+
+    <!-- === SCREEN: RESULTS === -->
+    <div id="screen-results" class="hidden fade-in">
+      <div class="max-w-lg mx-auto">
+
+        <!-- Score hero -->
+        <div class="question-card p-8 text-center mb-6">
+          <div class="score-ring mx-auto mb-4" id="scoreRing" style="--pct: 0;">
+            <div class="score-ring-inner">
+              <span class="font-display font-800 text-2xl" id="scorePct" style="font-family: 'Syne', sans-serif; font-weight: 800; color: var(--accent);">0%</span>
+              <span class="text-xs" style="color: var(--muted);">score</span>
+            </div>
+          </div>
+          <h2 class="font-display font-700 text-2xl mb-1" id="resultTitle" style="font-family: 'Syne', sans-serif; font-weight: 700;"></h2>
+          <p class="text-sm mb-4" id="resultSubtitle" style="color: var(--muted);"></p>
+
+          <!-- Stat chips -->
+          <div class="flex justify-center gap-3 flex-wrap">
+            <div class="pill" style="background: #f0fdf4; color: #16a34a;"><span id="statCorrect">0</span> correct</div>
+            <div class="pill" style="background: #fef2f2; color: #dc2626;"><span id="statWrong">0</span> wrong</div>
+            <div class="pill" style="background: #f0f5ff; color: var(--accent2);"><span id="statTime">0s</span> total</div>
+          </div>
+        </div>
+
+        <!-- Review -->
+        <div class="mb-6">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-display font-700 text-base" style="font-family: 'Syne', sans-serif; font-weight: 700;">Review Answers</h3>
+            <button class="btn-ghost px-3 py-1.5 text-xs" onclick="toggleReview()">Show / Hide</button>
+          </div>
+          <div id="reviewList" class="space-y-3 hidden"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-3 flex-col sm:flex-row">
+          <button class="btn-accent flex-1 py-3 text-sm" onclick="retakeQuiz()">Retake Quiz</button>
+          <button class="btn-primary flex-1 py-3 text-sm" onclick="newQuiz()">Upload New File</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+  <script src="loader.js"></script>
+
+</body>
+</html>

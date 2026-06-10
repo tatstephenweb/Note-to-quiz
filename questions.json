@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "question": "What does REST stand for?",
+    "options": [
+      "Representational State Transfer",
+      "Request Exchange System Tuple",
+      "Remote Execution Service Terminal",
+      "Reusable Embedded Software Technologies"
+    ],
+    "answer": "Representational State Transfer"
+  },
+  {
+    "id": 2,
+    "question": "Which protocol does REST use?",
+    "options": [
+      "HTTP/SMTP",
+      "HTTP",
+      "FTP",
+      "TCP/IP"
+    ],
+    "answer": "HTTP"
+  },
+  {
+    "id": 3,
+    "question": "Which format does REST support?",
+    "options": [
+      "JSON only",
+      "XML only",
+      "JSON/XML",
+      "HTML"
+    ],
+    "answer": "JSON/XML"
+  },
+  {
+    "id": 4,
+    "question": "What is the purpose of the @RestController annotation?",
+    "options": [
+      "To mark a class as a service component",
+      "To mark a class as a data-access component",
+      "To combine @Controller and @ResponseBody",
+      "To extract a value from the URL path"
+    ],
+    "answer": "To combine @Controller and @ResponseBody"
+  },
+  {
+    "id": 5,
+    "question": "What is the purpose of the @RequestMapping annotation?",
+    "options": [
+      "To set the HTTP response status code",
+      "To extract a query parameter",
+      "To set the base URL path for the controller",
+      "To deserialize the JSON body into a Java object"
+    ],
+    "answer": "To set the base URL path for the controller"
+  },
+  {
+    "id": 6,
+    "question": "What is the default port used by Spring Boot?",
+    "options": [
+      "8081",
+      "8080",
+      "8082",
+      "8083"
+    ],
+    "answer": "8080"
+  },
+  {
+    "id": 7,
+    "question": "Which database is used in the Spring Boot Quickstart example?",
+    "options": [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Oracle"
+    ],
+    "answer": "MySQL"
+  },
+  {
+    "id": 8,
+    "question": "What is the purpose of the @PathVariable annotation?",
+    "options": [
+      "To extract a query parameter",
+      "To extract a value from the URL path",
+      "To deserialize the JSON body into a Java object",
+      "To set the base URL path for the controller"
+    ],
+    "answer": "To extract a value from the URL path"
+  },
+  {
+    "id": 9,
+    "question": "What is the purpose of the @Entity annotation?",
+    "options": [
+      "To mark a class as a service component",
+      "To mark a class as a data-access component",
+      "To map a class to a database table",
+      "To extract a value from the URL path"
+    ],
+    "answer": "To map a class to a database table"
+  },
+  {
+    "id": 10,
+    "question": "What is the purpose of the @Autowired annotation?",
+    "options": [
+      "To mark a class as a service component",
+      "To mark a class as a data-access component",
+      "To inject a bean",
+      "To extract a value from the URL path"
+    ],
+    "answer": "To inject a bean"
+  }
+]

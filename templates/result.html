@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Result</title>
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#E8500A">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="QuizApp">
+    <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; }
+    h1 { font-size: 48px; color: #4CAF50; }
+    a { display: inline-block; margin-top: 20px; padding: 12px 30px;
+        background: #333; color: white; border-radius: 8px; text-decoration: none; }
+
+    :root {
+      --ink: #0d0d0d;
+      --paper: #f5f0e8;
+      --accent: #e8500a;
+      --accent2: #2563eb;
+      --muted: #8a8070;
+      --card: #fff;
+      --border: #e2dbd0;
+    }
+    main{
+      width: 100%;
+      margin: 0 auto;
+      position: absolute;
+      top:0px;
+      left:50%;
+      transform: translate(-50%,0);
+      width: 600px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      padding-top: 50px;
+    }
+  </style>
+</head>
+<body>
+  <p>Quiz Complete!</p>
+  <h1 style="font-size:50px;font-weight: bold; color: black;">{{ score }} / {{ total }}</h1>
+  <p>You scored: {{ score }} out of {{ total }} questions</p>
+  <a href="/home" style="background-color: #e8500a;color: white;" class="px-5 py-3 text-sm">Go Back Home</a>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/sw.js')
+      .then(() => console.log('Service Worker registered'))
+      .catch(err => console.log('SW error:', err));
+  }
+</script>
+</body>
+</html>
