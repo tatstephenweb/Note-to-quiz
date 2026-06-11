@@ -13,7 +13,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# ── Extract text from uploaded file ──────────────────────────
+# Extract the text from uploaded file 
 def extract_text(filepath):
     if filepath.endswith(".pdf"):
         doc = fitz.open(filepath)
@@ -60,7 +60,13 @@ Lecture content:
 # ── Routes ────────────────────────────────────────────────────
 @app.route("/", methods=["GET", "POST"])
 def upload():
+    if request.method == "GET":
+        session.clear()
+
     if request.method == "POST":
+
+        session.clear() #clear session to clear previous data
+
         file = request.files.get("file")
 
         if not file or file.filename == "":
@@ -80,10 +86,10 @@ def upload():
 
             questions = generate_questions(text)
 
-            with open("questions.json", "w") as f:
-                json.dump(questions, f, indent=2)
+            #with open("questions.json", "w") as f:
+             #   json.dump(questions, f, indent=2)
             
-            #session["questions"] = questions
+            session["questions"] = questions #adding sessions so there will be differnt users even without login
 
             return redirect(url_for("start"))
 
@@ -101,7 +107,10 @@ def start():
 
 @app.route("/quiz", methods=["GET", "POST"])
 def quiz():
-    questions = load_questions()
+    questions = session.get("questions") #get the stored questions from session
+    if not questions:
+        return render_template("upload.html")
+
     index = session.get("current", 0)
 
     if request.method == "POST":
@@ -126,6 +135,7 @@ def quiz():
 @app.route("/result")
 def result():
     score = session.get("score", 0)
+    questions = session.get("questions", [])
     total = len(load_questions())
     return render_template("result.html", score=score, total=total)
 
