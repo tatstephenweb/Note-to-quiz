@@ -33,7 +33,7 @@ def extract_text(filepath):
 
 def generate_questions(text):
     prompt = f"""
-Generate 10 multiple choice questions from this lecture content.
+Generate 20 multiple choice questions from this lecture content.
 Return ONLY a valid JSON array, no explanation, no markdown, no backticks.
 Each object must have exactly these fields:
 - "id": number
