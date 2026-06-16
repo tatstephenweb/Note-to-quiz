@@ -44,7 +44,7 @@ Quizzer is a web app that lets students upload lecture notes or slides and get A
 ### Prerequisites
 
 - Python 3.8+
-- An Anthropic API key
+- An Groq API Key
 
 ### Installation
 
