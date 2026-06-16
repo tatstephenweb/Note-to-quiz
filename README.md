@@ -98,4 +98,3 @@ quizzer/
 > _Add screenshots here once the app is deployed_
 
 ---
-## ABuilt by **Tat**
