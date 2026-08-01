@@ -1,6 +1,6 @@
 {
-  "name": "Notes to Quiz Generator",
-  "short_name": "Note To Quiz",
+  "name": "Quizzer",
+  "short_name": "Quizzer",
   "description": "Generate quizzes from lecture files",
   "start_url": "/",
   "display": "standalone",
